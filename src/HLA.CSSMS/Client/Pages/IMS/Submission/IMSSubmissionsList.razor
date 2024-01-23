@@ -1,0 +1,169 @@
+﻿@page "/ims/submission/list"
+@using Microsoft.AspNetCore.Authorization
+
+<h3>Submissions List</h3>
+
+@if (showError)
+{
+    <div class="alert alert-danger" role="alert">
+        <div>@message</div>
+    </div>
+}
+
+@if (showInfo)
+{
+    <div class="alert alert-info" role="alert">
+        <div>@message</div>
+    </div>
+}
+
+<AuthorizeView>
+    <Authorized>
+        @if (showLoading)
+        {
+            <span class="loading"></span>
+        }
+        else
+        {
+            if (mode == 0)
+            {
+                <div class="row">
+                    <div class="col-2 mb-2">
+                        <label class="form-label" >From Date</label>
+                        <input type="date" class="form-control" id="fromDate" name="fromDate" @bind-value="@fromDate">
+                    </div>
+                    <div class="col-2 mb-2">
+                        <label class="form-label">To Date</label>
+                        <input type="date" class="form-control" id="toDate" name="toDate" @bind-value="@toDate">
+                    </div>
+                    <div class="col-2 mb-2">
+                        <label class="form-label">Status</label>
+                        <select id="status" name="status" class="form-select" @bind="@filterStatus">
+                            <option value="0">All</option>
+                            <option value="1">In Progress</option>
+                            <option value="2">Completed</option>
+                        </select>
+                    </div>
+                    <div class="col-2 mb-2">
+                        <label class="form-label">RefNo</label>
+                        <input type="text" id="inputrefno" class="form-control" @bind-value="@filterRefNo">
+                    </div>
+                    <div class="col-4 mb-2">
+                        <div class="text-end">
+                            <button class="btn btn-primary btn-smc" @onclick="(() => ViewError())">
+                                <span class="oi oi-eye"></span>
+                            </button>
+                            <button class="btn btn-primary btn-smc" @onclick="(() => ReLoad())">
+                                <span class="oi oi-reload"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <SfGrid @ref="@_grid" DataSource="@SubmissionManager.SubmissionCases" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowSelection="true">
+                        <GridPageSettings PageSize="@pageSize"></GridPageSettings>
+                        <GridSelectionSettings Type="SelectionType.Single" Mode="SelectionMode.Row"></GridSelectionSettings>
+                        <GridEvents RowSelected="GetSelectedRecords" TValue="IMSSubmissionsDto"></GridEvents>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(submission.RefNo) HeaderText="RefNo" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(submission.SourceName) HeaderText="Source" Width="80"></GridColumn>
+                            <GridColumn Field=@nameof(submission.AgentCode) HeaderText="AgentCode" Width="120"></GridColumn>
+                            <GridColumn Field=@nameof(submission.PolicyNo) HeaderText="PolicyNo"></GridColumn>
+                            <GridColumn Field=@nameof(submission.CopyStatus) HeaderText="CopyStatus"></GridColumn>
+                            <GridColumn Field=@nameof(submission.DecyptStatus) HeaderText="DecyptStatus"></GridColumn>
+                            <GridColumn Field=@nameof(submission.EAIStatus) HeaderText="EAIStatus"></GridColumn>
+                            <GridColumn Field=@nameof(submission.ConvertStatus) HeaderText="ConvertStatus"></GridColumn>
+                            <GridColumn Field=@nameof(submission.ExportStatus) HeaderText="ExportStatus"></GridColumn>
+                            <GridColumn Field=@nameof(submission.CreatedAt) HeaderText="CreatedAt"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            }
+            else if (mode == 1)
+            {
+                <div class="card">
+                    <div class="card-header">View Submission Case</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label class="form-label">RefNo</label>
+                                <input type="text" id="refno" value="@submission.RefNo" class="form-control" readonly>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label class="form-label">PolicyNo</label>
+                                <input type="text" id="policyno" value="@submission.PolicyNo" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label class="form-label">Source</label>
+                                <input type="text" id="source" value="@submission.SourceName" class="form-control" readonly>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label class="form-label">Submit By</label>
+                                <input type="text" id="submitby" value="@submission.AgentCode" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-2">
+                                <label class="form-label">Status</label>
+                                @if (submission.CopyStatus == "In Progress")
+                                {
+                                    <input type="text" id="status" value="Copy" class="form-control" readonly>
+                                }
+                                else if (submission.DecyptStatus == "In Progress")
+                                {
+                                    <input type="text" id="status" value="Decypt" class="form-control" readonly>
+                                }
+                                else if (submission.EAIStatus == "In Progress")
+                                {
+                                    <input type="text" id="status" value="EAI" class="form-control" readonly>
+                                }
+                                else if (submission.ConvertStatus == "In Progress")
+                                {
+                                    <input type="text" id="status" value="Convert" class="form-control" readonly>
+                                }
+                                else if (submission.ExportStatus == "In Progress")
+                                {
+                                    <input type="text" id="status" value="Export" class="form-control" readonly>
+                                }
+                                else
+                                {
+                                    <input type="text" id="status" value="Completed" class="form-control" readonly>
+                                }
+                            </div>
+                            <div class="col-6 mb-2">
+                                <label class="form-label">Created At</label>
+                                <input type="text" id="createdat" value="@submission.CreatedAt.ToString()" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            @if (submission.Errors.Messages.Count > 0)
+                            {
+                                <div class="col-12 mb-2">
+                                    <label class="form-label">Errors</label>
+                                    <table class="form-control">
+                                        @foreach (var message in submission.Errors.Messages)
+                                        {
+                                            <tr>
+                                                <td>@message</td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end" style="margin-top:5px">
+                    <button class="btn btn-primary btn-sm" @onclick="CancelViewError">
+                        <span class="oi oi-action-undo"></span> Cancel
+                    </button>
+                </div>
+            }
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized to view this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
