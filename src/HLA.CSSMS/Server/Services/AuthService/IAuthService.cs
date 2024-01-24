@@ -7,6 +7,7 @@
         Task<ServiceResponse<int>> CreateUserAccount(UserAccountDto user);
         Task<ServiceResponse<int>> UpdateUserAccount(UserAccountDto user);
         Task<ServiceResponse<int>> DeleteUserAccount(string userId);
+        Task<ServiceResponse<int>> UpdateUserPassword(ChangePasswordDto user);
         string GetUserId();
     }
 }

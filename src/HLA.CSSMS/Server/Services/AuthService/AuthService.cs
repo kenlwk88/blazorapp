@@ -90,14 +90,14 @@ namespace HLA.CSSMS.Server.Services.AuthService
                 DisplayName = displayName
             };
             var result = await _userManager.CreateAsync(newUser, user.Password);
-            await _userManager.AddToRoleAsync(newUser, "Registered");
+            await _userManager.AddToRoleAsync(newUser, "User");
 
             if (!result.Succeeded)
             {
                 return new ServiceResponse<int>
                 {
                     Success = false,
-                    Message = "Oops, something went wrong :/"
+                    Message = "Registration failed!"
                 };
             }
 
@@ -140,7 +140,7 @@ namespace HLA.CSSMS.Server.Services.AuthService
                 return new ServiceResponse<int>
                 {
                     Success = false,
-                    Message = "Oops, something went wrong :/"
+                    Message = "New account creation failed!"
                 };
             }
             
@@ -173,7 +173,7 @@ namespace HLA.CSSMS.Server.Services.AuthService
                 return new ServiceResponse<int>
                 {
                     Success = false,
-                    Message = "Oops, something went wrong :/"
+                    Message = "Account updated failed!"
                 };
             }
 
@@ -204,7 +204,7 @@ namespace HLA.CSSMS.Server.Services.AuthService
                 return new ServiceResponse<int>
                 {
                     Success = false,
-                    Message = "Oops, something went wrong :/"
+                    Message = "User account deleted failed!"
                 };
             }
             
@@ -249,6 +249,35 @@ namespace HLA.CSSMS.Server.Services.AuthService
             return claims;
         }
 
-        
+        public async Task<ServiceResponse<int>> UpdateUserPassword(ChangePasswordDto user)
+        {
+            var currentUser = await _userManager.FindByIdAsync(user.UserId);
+            var generateToken = await _userManager.GeneratePasswordResetTokenAsync(currentUser);
+            if (!string.IsNullOrEmpty(generateToken))
+            {
+                var result = await _userManager.ResetPasswordAsync(currentUser, generateToken, user.Password);
+                if (!result.Succeeded)
+                {
+                    return new ServiceResponse<int>
+                    {
+                        Success = false,
+                        Message = "Password updated failed!"
+                    };
+                }
+            }
+            else 
+            {
+                return new ServiceResponse<int>
+                {
+                    Success = false,
+                    Message = "Password updated failed!"
+                };
+            }
+            return new ServiceResponse<int>
+            {
+                Success = true,
+                Message = "Password updated successful!"
+            };
+        }
     }
 }

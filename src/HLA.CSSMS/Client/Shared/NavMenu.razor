@@ -1,17 +1,13 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">HLA CSSMS</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿<div>
+    <img style="width:15%;margin-left:10px;margin-top:10px" src="icon/logo1.svg" />
+    <img style="width:75%;margin-top:15px" src="icon/logo.png" />
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+                <span class="oi oi-home" aria-hidden="true"></span> Dashboard
             </NavLink>
         </div>
 

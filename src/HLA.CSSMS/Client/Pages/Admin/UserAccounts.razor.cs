@@ -1,17 +1,21 @@
-﻿namespace HLA.CSSMS.Client.Pages.Admin
+﻿using HLA.CSSMS.Shared.Dtos;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+
+namespace HLA.CSSMS.Client.Pages.Admin
 {
     public partial class UserAccounts
     {
         [Inject] IUserAccountManager UserAccountManager { get; set; }
 
+        int mode = 0; //0=main, 1=add/edit
         int pageSize = 20;
         bool showError = false;
         bool showInfo = false;
         bool showLoading = false;
         string message = string.Empty;
-        bool isInAccountEditMode = false;
         string selectedUserId = string.Empty;
         UserAccountDto user = new UserAccountDto();
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto();
 
         SfGrid<UserAccountDto> _grid;
 
@@ -37,7 +41,7 @@
         {
             Init();
             user = new UserAccountDto();
-            isInAccountEditMode = true;
+            mode = 1;
             selectedUserId = string.Empty;
         }
 
@@ -50,13 +54,13 @@
                 var result = await UserAccountManager.GetUserDetails(selectedUserId);
                 if (result.Success)
                     user = result.Data;
-                isInAccountEditMode = true;
+                mode = 1;
             }
             else 
             {
                 showError = true;
-                message = "Please select a user";
-                isInAccountEditMode = false;
+                message = "Please select a record";
+                mode = 0;
             }
             selectedUserId = string.Empty;
         }
@@ -66,7 +70,7 @@
         {
             Init();
             user = new UserAccountDto();
-            isInAccountEditMode = false;
+            mode = 0;
             selectedUserId = string.Empty;
         }
 
@@ -103,10 +107,9 @@
                     message = result.Message;
                 }
             }
-
             user = new UserAccountDto();
             await UserAccountManager.GetUserAccounts();
-            isInAccountEditMode = false;
+            mode = 0;
             selectedUserId = string.Empty;
         }
 
@@ -133,6 +136,61 @@
             {
                 showError = true;
                 message = "Please select a record";
+            }
+            selectedUserId = string.Empty;
+        }
+        private async Task ChangeUserPassword()
+        {
+            Init();
+            if (!string.IsNullOrEmpty(selectedUserId))
+            {
+                changePasswordDto = new ChangePasswordDto();
+                var result = await UserAccountManager.GetUserDetails(selectedUserId);
+                changePasswordDto.UserId = selectedUserId;
+                changePasswordDto.UserName = result.Data.UserName;
+                changePasswordDto.Email = result.Data.Email;
+                mode = 2;
+            }
+            else 
+            {
+                showError = true;
+                message = "Please select a record";
+            }
+        }
+        private void CancelChangeUserPassword()
+        {
+            Init();
+            changePasswordDto = new ChangePasswordDto();
+            selectedUserId = string.Empty;
+            mode = 0;
+        }
+        private async Task UpdateUserPassword()
+        {
+            Init();
+            if (!string.IsNullOrEmpty(changePasswordDto.UserId))
+            {
+                var result = await UserAccountManager.UpdateUserPassword(changePasswordDto);
+
+                if (result.Success)
+                {
+                    showInfo = true;
+                    message = result.Message;
+                }
+                else
+                {
+                    showError = true;
+                    message = result.Message;
+                }
+                changePasswordDto = new ChangePasswordDto();
+                selectedUserId = string.Empty;
+                await UserAccountManager.GetUserAccounts();
+                mode = 0;
+            }
+            else
+            {
+                showError = true;
+                message = "Please select a record";
+                mode = 0;
             }
             selectedUserId = string.Empty;
         }

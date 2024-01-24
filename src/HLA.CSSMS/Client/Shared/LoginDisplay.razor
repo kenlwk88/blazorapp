@@ -4,15 +4,17 @@
 
 <AuthorizeView>
     <Authorized>
-        <a href="/profile">Hello, @context.User.Identity?.Name!</a>
-        <a href="/logout">Log out</a>
+        <img src="icon/user.png" width="50"style="border-radius:50%;border-color:lightgrey;border-style:solid;border-width:thin;margin-right:5px" />
+        <h6>@context.User.Identity?.Name</h6>
+        <a href="#"><span class="oi oi-bell"></span></a>
+        <a href="/logout"><span class="oi oi-account-logout"></span></a>
     </Authorized>
     <NotAuthorized>
-        <a href="/register">Register</a>
-        <a href="/login">Log in</a>
+        <a href="/register"><span class="oi oi-plus"></span></a>
+        <a href="/login"><span class="oi oi-account-login"></span></a>
     </NotAuthorized>
 </AuthorizeView>
 
-@code{
+@code {
 
 }

@@ -46,5 +46,11 @@
             var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
             return result;
         }
+        public async Task<ServiceResponse<int>> UpdateUserPassword(ChangePasswordDto updateUserPassword)
+        {
+            var response = await _http.PostAsJsonAsync("api/auth/UpdateUserPassword", updateUserPassword);
+            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+            return result;
+        }
     }
 }

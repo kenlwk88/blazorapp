@@ -1,7 +1,7 @@
 ﻿@page "/ims/submission/list"
 @using Microsoft.AspNetCore.Authorization
 
-<h3>Submissions List</h3>
+<h3>IMS Submissions</h3>
 
 @if (showError)
 {
@@ -48,7 +48,11 @@
                         <label class="form-label">RefNo</label>
                         <input type="text" id="inputrefno" class="form-control" @bind-value="@filterRefNo">
                     </div>
-                    <div class="col-4 mb-2">
+                    <div class="col-2 mb-2">
+                        <label class="form-label">PolicyNo</label>
+                        <input type="text" id="policyno" class="form-control" @bind-value="@filterPolicyNo">
+                    </div>
+                    <div class="col-2 mb-2">
                         <div class="text-end">
                             <button class="btn btn-primary btn-smc" @onclick="(() => ViewError())">
                                 <span class="oi oi-eye"></span>

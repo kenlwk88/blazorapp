@@ -12,5 +12,6 @@ namespace HLA.CSSMS.Shared.Models
         public DateTime ToDate { get; set; } 
         public string RefNo { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public string PolicyNo { get; set; } = string.Empty;
     }
 }

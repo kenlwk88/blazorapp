@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Shared\HLA.CSSMS.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\icon\" />
+  </ItemGroup>
+
 </Project>

@@ -27,6 +27,8 @@
                         parameters.Add("@status", "In Progress", dbType: DbType.String);
                     }
                 }
+                if (!string.IsNullOrEmpty(filter.PolicyNo))
+                    parameters.Add("@policyNo", filter.PolicyNo, dbType: DbType.String);
                 var result = await _dbContext.QueryStoredProcedureAsync<IMSSubmissionsDto>("GetSubmissionCases", parameters);
                 return result;
             }

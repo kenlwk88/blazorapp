@@ -13,16 +13,18 @@
         DateTime fromDate;
         DateTime toDate;
         string filterRefNo = string.Empty;
+        string filterPolicyNo = string.Empty;
         string filterStatus = string.Empty; //0=All, 1=In Progress, 2=Completed
         IMSSubmissionsDto submission = new IMSSubmissionsDto();
 
         SfGrid<IMSSubmissionsDto> _grid;
         protected override async Task OnInitializedAsync()
         {
-            fromDate = DateTime.Now.AddDays(-7);
+            fromDate = DateTime.Now.AddDays(-5);
             toDate = DateTime.Now;
             filterRefNo = string.Empty;
             filterStatus = "0";
+            await ReLoad();
         }
 
         private void Init()
@@ -41,7 +43,7 @@
                 {
                     Init();
                     submission = new IMSSubmissionsDto();
-                    await SubmissionManager.GetList(fromDate, toDate, filterRefNo, filterStatus);
+                    await SubmissionManager.GetList(fromDate, toDate, filterRefNo, filterStatus, filterPolicyNo);
                 }
                 else 
                 {

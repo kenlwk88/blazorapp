@@ -61,9 +61,12 @@ namespace HLA.CSSMS.Server.Controllers
             return result;
         }
 
-
-
-
-
+        [HttpPost("UpdateUserPassword")]
+        [Authorize(Policy = "IsSuperAdmin")]
+        public async Task<ServiceResponse<int>> UpdateUserPassword(ChangePasswordDto request)
+        {
+            var result = await _authService.UpdateUserPassword(request);
+            return result;
+        }
     }
 }
