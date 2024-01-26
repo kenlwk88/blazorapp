@@ -239,7 +239,7 @@ namespace HLA.CSSMS.Server.Services.AuthService
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, login.Email),
+                new Claim(ClaimTypes.Name, user.DisplayName),
                 new Claim(ClaimTypes.Email, login.Email)
             };
 

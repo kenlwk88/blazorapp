@@ -4,14 +4,17 @@
 
 <AuthorizeView>
     <Authorized>
-        <img src="icon/user.png" width="50"style="border-radius:50%;border-color:lightgrey;border-style:solid;border-width:thin;margin-right:5px" />
-        <h6>@context.User.Identity?.Name</h6>
-        <a href="#"><span class="oi oi-bell"></span></a>
-        <a href="/logout"><span class="oi oi-account-logout"></span></a>
+        <div>
+            <h6>@context.User.Identity?.Name</h6>
+            <h7><img src="icon/green dot.png" width="20"/> Online</h7>
+        </div>
+        <img src="icon/user.png" width="50" style="border-radius:50%;border-color:lightgrey;border-style:solid;border-width:thin;margin-right:5px;margin-left:5px" />
+        <a href="#" title="Notifications"><span class="oi oi-bell"></span></a>
+        <a href="/logout" title="Logout"><span class="oi oi-account-logout"></span></a>
     </Authorized>
     <NotAuthorized>
-        <a href="/register"><span class="oi oi-plus"></span></a>
-        <a href="/login"><span class="oi oi-account-login"></span></a>
+        <a href="/register" title="Register"><span class="oi oi-plus"></span></a>
+        <a href="/login" title="Login"><span class="oi oi-account-login"></span></a>
     </NotAuthorized>
 </AuthorizeView>
 

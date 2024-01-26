@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HLA.CSSMS.Server.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class IMSSubmissionController : ControllerBase
     {

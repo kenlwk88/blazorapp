@@ -31,19 +31,19 @@
                 <div class="row">
                     <div class="col-12 mb-2">
                         <div class="text-end">
-                            <button class="btn btn-primary btn-smc" @onclick="AddUserAccount">
+                            <button class="btn btn-primary btn-smc" title="Create User" @onclick="AddUserAccount">
                                 <span class="oi oi-plus"></span>
                             </button>
-                            <button class="btn btn-primary btn-smc" @onclick="(() => EditUser())">
+                            <button class="btn btn-primary btn-smc" title="Edit User" @onclick="(() => EditUser())">
                                 <span class="oi oi-pencil"></span>
                             </button>
-                            <button class="btn btn-primary btn-smc" @onclick="(() => DeleteUser())">
+                            <button class="btn btn-primary btn-smc" title="Delete User" @onclick="(() => DeleteUser())">
                                 <span class="oi oi-trash"></span>
                             </button>
-                            <button class="btn btn-primary btn-smc" @onclick="ChangeUserPassword">
+                            <button class="btn btn-primary btn-smc" title="Change User Password" @onclick="ChangeUserPassword">
                                 <span class="oi oi-key"></span>
                             </button>
-                            <button class="btn btn-primary btn-smc" @onclick="(() => ReLoad())">
+                            <button class="btn btn-primary btn-smc" title="Refresh" @onclick="(() => ReLoad())">
                                 <span class="oi oi-reload"></span>
                             </button>
                         </div>
