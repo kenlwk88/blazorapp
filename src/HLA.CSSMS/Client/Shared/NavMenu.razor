@@ -5,7 +5,7 @@
 
 <div class="@NavMenuCssClass">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item px-1">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Dashboard
             </NavLink>
@@ -13,23 +13,59 @@
 
         <AuthorizeView>
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="ims/submission/list">
-                        <span class="oi oi-file" aria-hidden="true"></span> IMS Submissions
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" @onclick="()=>expandImsSubMenu = !expandImsSubMenu">
+                        <span class="oi oi-file" aria-hidden="true"></span> IMS / eApp
+                        <div class="text-lg-end" style="margin-left:auto">
+                            @if (expandImsSubMenu)
+                            {
+                                <span class="oi oi-chevron-bottom" aria-hidden="true"></span>
+                            }
+                            else
+                            {
+                                <span class="oi oi-chevron-top" aria-hidden="true"></span>
+                            }
+                        </div>
                     </NavLink>
+                    @if (expandImsSubMenu)
+                    {
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="ims/submission/list">
+                                <span aria-hidden="true"></span> Submissions
+                            </NavLink>
+                        </div>
+                    }
                 </div>
             </Authorized>
         </AuthorizeView>
 
         <AuthorizeView Policy="IsSuperAdmin">
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="admin/user-accounts">
-                        <span class="oi oi-people" aria-hidden="true"></span> User Accounts
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" @onclick="()=>expandAdminSubMenu = !expandAdminSubMenu">
+                        <span class="oi oi-align-left" aria-hidden="true"></span> Admin
+                        <div class="text-lg-end" style="margin-left:auto">
+                            @if (expandAdminSubMenu)
+                            {
+                                <span class="oi oi-chevron-bottom" aria-hidden="true"></span>
+                            }
+                            else
+                            {
+                                <span class="oi oi-chevron-top" aria-hidden="true"></span>
+                            }
+                        </div>
                     </NavLink>
+                    @if (expandAdminSubMenu)
+                    {
+                        <div class="nav-item px-3">
+                            <NavLink class="nav-link" href="admin/user-accounts">
+                                <span class="oi oi-people" aria-hidden="true"></span> User Accounts
+                            </NavLink>
+                        </div>
+                    }
                 </div>
             </Authorized>
-        </AuthorizeView> 
+        </AuthorizeView>
     </nav>
 </div>
 
@@ -37,6 +73,8 @@
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bool expandImsSubMenu;
+    private bool expandAdminSubMenu;
 
     private void ToggleNavMenu()
     {
