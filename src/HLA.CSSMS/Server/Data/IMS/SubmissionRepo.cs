@@ -14,9 +14,9 @@
                 var parameters = new DynamicParameters();
                 parameters.Add("@fromDate", filter.FromDate, dbType: DbType.DateTime);
                 parameters.Add("@toDate", filter.ToDate, dbType: DbType.DateTime);
-                if(!string.IsNullOrEmpty(filter.RefNo))
+                if (!string.IsNullOrEmpty(filter.RefNo))
                     parameters.Add("@refNo", filter.RefNo, dbType: DbType.String);
-                if (!string.IsNullOrEmpty(filter.Status) && filter.Status != "0") 
+                if (!string.IsNullOrEmpty(filter.Status) && filter.Status != "0")
                 {
                     if (filter.Status == "2") // Completed
                     {
@@ -30,6 +30,20 @@
                 if (!string.IsNullOrEmpty(filter.PolicyNo))
                     parameters.Add("@policyNo", filter.PolicyNo, dbType: DbType.String);
                 var result = await _dbContext.QueryStoredProcedureAsync<IMSSubmissionsDto>("GetSubmissionCases", parameters);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<DocumentsDto>> GetDocs(string RefNo)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@refNo", RefNo, dbType: DbType.String);
+                var result = await _dbContext.QueryStoredProcedureAsync<DocumentsDto>("GetDocuments", parameters);
                 return result;
             }
             catch (Exception ex)

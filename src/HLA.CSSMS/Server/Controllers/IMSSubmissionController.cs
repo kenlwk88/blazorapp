@@ -24,5 +24,11 @@ namespace HLA.CSSMS.Server.Controllers
             var result = await _iIMSSubmissionService.GetSubmissionCases(filter);
             return result;
         }
+        [HttpGet("GetDocs/{refNo}")]
+        public async Task<ActionResult<ServiceResponse<List<DocumentsDto>>>> GetDocs(string refNo)
+        {
+            var result = await _iIMSSubmissionService.GetDocs(refNo);
+            return result;
+        }
     }
 }

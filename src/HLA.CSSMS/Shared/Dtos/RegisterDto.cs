@@ -23,10 +23,11 @@ namespace HLA.CSSMS.Shared.Dtos
 		public string Email { get; set; } = string.Empty;
 
 		[Required]
-		[StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-		[DataType(DataType.Password)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [DataType(DataType.Password)]
 		[Display(Name = "Password")]
-		public string Password { get; set; } = string.Empty;
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessage = "Password must have minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character")]
+        public string Password { get; set; } = string.Empty;
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm password")]

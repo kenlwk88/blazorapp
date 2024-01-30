@@ -54,8 +54,11 @@
                     </div>
                     <div class="col-2 mb-2">
                         <div class="text-end">
-                            <button class="btn btn-primary btn-smc" title="View Submission Case" @onclick="(() => ViewError())">
+                            <button class="btn btn-primary btn-smc" title="View Submission Case" @onclick="(() => ViewSubmission())">
                                 <span class="oi oi-eye"></span>
+                            </button>
+                            <button class="btn btn-primary btn-smc" title="View Documents" @onclick="(() => ViewDocuments())">
+                                <span class="oi oi-document"></span>
                             </button>
                             <button class="btn btn-primary btn-smc" title="Refresh" @onclick="(() => ReLoad())">
                                 <span class="oi oi-reload"></span>
@@ -160,7 +163,31 @@
                     </div>
                 </div>
                 <div class="text-end" style="margin-top:5px">
-                    <button class="btn btn-primary btn-sm" @onclick="CancelViewError">
+                    <button class="btn btn-primary btn-sm" @onclick="CancelView">
+                        <span class="oi oi-action-undo"></span> Cancel
+                    </button>
+                </div>
+            }
+            else if (mode == 2)
+            {
+                <h4>View Documents</h4>
+                <div>
+                    <SfGrid @ref="@_gridDoc" DataSource="@SubmissionManager.Documents" AllowSorting="true" AllowSelection="true">
+                        <GridSelectionSettings Type="SelectionType.Single" Mode="SelectionMode.Row"></GridSelectionSettings>
+                        <GridEvents RowSelected="GetSelectedDoc" TValue="DocumentsDto"></GridEvents>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(doc.RefNo) HeaderText="RefNo" Width="200"></GridColumn>
+                            <GridColumn Field=@nameof(doc.DocumentType) HeaderText="Document" Width="100"></GridColumn>
+                            <GridColumn Field=@nameof(doc.FileType) HeaderText="Type" Width="80"></GridColumn>
+                            <GridColumn Field=@nameof(doc.SourcePath) HeaderText="SourcePath"></GridColumn>
+                            <GridColumn Field=@nameof(doc.TiffPath) HeaderText="TiffPath"></GridColumn>
+                            <GridColumn Field=@nameof(doc.CreatedAt) HeaderText="CreatedAt" Width="160"></GridColumn>
+                            <GridColumn Field=@nameof(doc.LastUpdateAt) HeaderText="LastUpdateAt" Width="160"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+                <div class="text-end" style="margin-top:5px">
+                    <button class="btn btn-primary btn-sm" @onclick="CancelView">
                         <span class="oi oi-action-undo"></span> Cancel
                     </button>
                 </div>

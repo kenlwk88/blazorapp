@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.4" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.JSInterop" Version="6.0.26" />
     <PackageReference Include="Syncfusion.Blazor.Grid" Version="24.1.45" />
     <PackageReference Include="Syncfusion.Blazor.Themes" Version="24.1.46" />
   </ItemGroup>

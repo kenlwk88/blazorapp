@@ -16,6 +16,7 @@ namespace HLA.CSSMS.Client.Services.IMS.Submission.IMSSubmissionManager
         public event System.Action OnChange;
 
         public  List<IMSSubmissionsDto> SubmissionCases { get; set; } = new List<IMSSubmissionsDto>();
+        public List<DocumentsDto> Documents { get; set; } = new List<DocumentsDto>();
 
         public async Task GetList(DateTime fromDate, DateTime toDate, string refNo, string status, string policyNo)
         {
@@ -33,6 +34,12 @@ namespace HLA.CSSMS.Client.Services.IMS.Submission.IMSSubmissionManager
             {
                 SubmissionCases = result.Data;
             }
+        }
+        public async Task GetDocs(string refNo)
+        {
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<DocumentsDto>>>($"api/IMSSubmission/GetDocs/{refNo}");
+            if (response != null && response.Data != null)
+                Documents = response.Data;
         }
     }
 }
