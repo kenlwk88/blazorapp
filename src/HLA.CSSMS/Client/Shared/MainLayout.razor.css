@@ -79,3 +79,12 @@ main {
         padding-right: 1.5rem !important;
     }
 }
+
+.profile-image {
+    border-radius: 50%;
+    border-color: lightgrey;
+    border-style: solid;
+    border-width: thin;
+    margin-right: 5px;
+    margin-left: 5px;
+}

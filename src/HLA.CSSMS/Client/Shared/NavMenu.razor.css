@@ -60,3 +60,13 @@
         display: block;
     }
 }
+.hla-logo {
+    width: 15%;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.hla-logo-word {
+    width: 75%;
+    margin-top: 15px;
+}
