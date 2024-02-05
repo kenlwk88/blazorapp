@@ -16,7 +16,6 @@ namespace HLA.CSSMS.Shared.Dtos
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessage = "Password must have minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character")]

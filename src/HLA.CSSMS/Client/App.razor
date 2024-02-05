@@ -3,7 +3,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <p role="alert">You are not authorized to access this resource.</p>
+                    <p role="alert">You are not authorized or session expired. Please login and try again. Thank you!</p>
                 </NotAuthorized>
                 <Authorizing>
                     <div><span class="loading"></span></div>

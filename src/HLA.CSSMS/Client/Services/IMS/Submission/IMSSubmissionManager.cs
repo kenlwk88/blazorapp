@@ -8,14 +8,16 @@ namespace HLA.CSSMS.Client.Services.IMS.Submission.IMSSubmissionManager
     public class IMSSubmissionManager : IIMSSubmissionManager
     {
         private readonly HttpClient _http;
-        public IMSSubmissionManager(HttpClient http)
+        private readonly IAuthService _authService;
+        public IMSSubmissionManager(HttpClient http, IAuthService authService)
         {
             _http = http;
+            _authService = authService;
         }
 
         public event System.Action OnChange;
 
-        public  List<IMSSubmissionsDto> SubmissionCases { get; set; } = new List<IMSSubmissionsDto>();
+        public List<IMSSubmissionsDto> SubmissionCases { get; set; } = new List<IMSSubmissionsDto>();
         public List<DocumentsDto> Documents { get; set; } = new List<DocumentsDto>();
 
         public async Task GetList(DateTime fromDate, DateTime toDate, string refNo, string status, string policyNo)
@@ -28,18 +30,36 @@ namespace HLA.CSSMS.Client.Services.IMS.Submission.IMSSubmissionManager
                 Status = status,
                 PolicyNo = policyNo
             };
+
             var response = await _http.PostAsJsonAsync("api/IMSSubmission/GetList", filter);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<List<IMSSubmissionsDto>>>();
-            if (result.Success)
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                SubmissionCases = result.Data;
+                await _authService.Logout();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<List<IMSSubmissionsDto>>>();
+                if (result.Success)
+                {
+                    SubmissionCases = result.Data;
+                }
             }
         }
         public async Task GetDocs(string refNo)
         {
-            var response = await _http.GetFromJsonAsync<ServiceResponse<List<DocumentsDto>>>($"api/IMSSubmission/GetDocs/{refNo}");
-            if (response != null && response.Data != null)
-                Documents = response.Data;
+            var response = await _http.GetAsync($"api/IMSSubmission/GetDocs/{refNo}");
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<List<DocumentsDto>>>();
+                if (result.Success)
+                {
+                    Documents = result.Data;
+                }
+            }
         }
     }
 }

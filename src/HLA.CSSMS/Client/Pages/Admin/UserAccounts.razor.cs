@@ -53,7 +53,12 @@ namespace HLA.CSSMS.Client.Pages.Admin
             {
                 var result = await UserAccountManager.GetUserDetails(selectedUserId);
                 if (result.Success)
+                {
                     user = result.Data;
+                    //hard code dummy password to by pass mandarotory parameter, it's not update the password into database
+                    user.Password = "Welcome1!";
+                    user.ConfirmPassword = "Welcome1!";
+                }
                 mode = 1;
             }
             else 
@@ -78,8 +83,10 @@ namespace HLA.CSSMS.Client.Pages.Admin
         private async Task UpdateUserAccount()
         {
             Init();
+            Console.WriteLine($"UserId: {user.UserId}");
             if (!string.IsNullOrEmpty(user.UserId))
             {
+                //hard code dummy password but it does not update the password into db
                 var result = await UserAccountManager.UpdateUserAccount(user);
 
                 if (result.Success)

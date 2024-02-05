@@ -3,9 +3,11 @@
     public class UserAccountManager : IUserAccountManager
     {
         private readonly HttpClient _http;
-        public UserAccountManager(HttpClient http)
+        private readonly IAuthService _authService;
+        public UserAccountManager(HttpClient http, IAuthService authService)
         {
             _http = http;
+            _authService = authService;
         }
 
         public event System.Action OnChange;
@@ -14,43 +16,92 @@
 
         public async Task GetUserAccounts()
         {
-            var response = await _http.GetFromJsonAsync<ServiceResponse<List<UserAccountDto>>>("api/UserAccount/GetUserAccounts");
-
-            if (response != null && response.Data != null)
-                UserList = response.Data;
+            var response = await _http.GetAsync("api/UserAccount/GetUserAccounts");
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<List<UserAccountDto>>>();
+                if (result.Success)
+                {
+                    UserList = result.Data;
+                }
+            }
         }
 
         public async Task<ServiceResponse<UserAccountDto>> GetUserDetails(string userId)
         {
-            var response = await _http.GetFromJsonAsync<ServiceResponse<UserAccountDto>>($"api/UserAccount/GetUserDetails/{userId}");
-            return response;
+            var response = await _http.GetAsync($"api/UserAccount/GetUserDetails/{userId}");
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+                return new();
+            }
+            else
+            {
+                return await response.Content.ReadFromJsonAsync<ServiceResponse<UserAccountDto>>();
+            }
         }
 
         public async Task<ServiceResponse<int>> CreateNewUserAccount(UserAccountDto userAccount)
         {
             var response = await _http.PostAsJsonAsync("api/auth/CreateUserAccount", userAccount);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
-            return result;
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+                return new();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+                return result;
+            }
         }
 
         public async Task<ServiceResponse<int>> UpdateUserAccount(UserAccountDto userAccount)
         {
             var response = await _http.PostAsJsonAsync("api/auth/UpdateUserAccount", userAccount);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
-            return result;
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+                return new();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+                return result;
+            }
         }
 
         public async Task<ServiceResponse<int>> DeleteUserAccount(string userId)
         {
             var response = await _http.DeleteAsync($"api/auth/DeleteUserAccount/{userId}");
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
-            return result;
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+                return new();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+                return result;
+            }
         }
         public async Task<ServiceResponse<int>> UpdateUserPassword(ChangePasswordDto updateUserPassword)
         {
             var response = await _http.PostAsJsonAsync("api/auth/UpdateUserPassword", updateUserPassword);
-            var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
-            return result;
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await _authService.Logout();
+                return new();
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+                return result;
+            }
         }
     }
 }
