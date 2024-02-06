@@ -41,6 +41,11 @@
     private string hideLogin = isShowLogin(true);
     bool isShow;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.Logout();
+    }
+
     private async Task HandleLogin()
     {
         ShowErrors = false;
