@@ -1,6 +1,4 @@
 ﻿@page "/register"
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
 
 <h3>Register</h3>
 
@@ -50,42 +48,3 @@
         <span>@message</span>
     </div>
 </EditForm>
-
-
-
-
-
-
-
-
-@code {
-    RegisterDto user = new RegisterDto();
-    string message = string.Empty;
-    string messageCssClass = string.Empty;
-
-    async Task HandleRegistration()
-    {
-        var result = await AuthService.Register(user);
-        message = result.Message;
-        if (result.Success)
-            NavigationManager.NavigateTo("/login");
-        else
-            messageCssClass = "text-danger";
-    }
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-}
